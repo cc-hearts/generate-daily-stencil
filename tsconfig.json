@@ -1,4 +1,6 @@
 {
   "extends": "@cc-heart/utils",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "module": "UMD"
+  }
 }
