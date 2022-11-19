@@ -1,6 +1,7 @@
 {
   "extends": "@cc-heart/utils",
   "compilerOptions": {
-    "module": "UMD"
-  }
+    "outDir": "./dist"
+  },
+  "include": ["lib/**/*","index.ts"]
 }
