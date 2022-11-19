@@ -1,0 +1,4 @@
+{
+  "extends": "@cc-heart/utils",
+  "compilerOptions": {}
+}
