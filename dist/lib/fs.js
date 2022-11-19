@@ -3,7 +3,7 @@ import { resolve } from "path";
 import { fileURLToPath } from "url";
 import { generateCurrentData } from "./date.js";
 export function getPackageName(pack) {
-    const reg = /to\s*(\/.*?package\.json)/gm;
+    const reg = /to\s*(.*?package\.json)/gm;
     if (reg.test(pack)) {
         return RegExp.$1;
     }
