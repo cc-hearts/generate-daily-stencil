@@ -4,7 +4,7 @@
  * @Date 2022-11-19
  */
 import { logger } from "@cc-heart/utils";
-import { exec } from "child_process";
+import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { createFile, exist, getPackageName } from "./lib/fs.js";
 import config from "./lib/config.js";
@@ -17,11 +17,9 @@ function bootstrap() {
     if (bool) {
         throw new Error("package.json is exist");
     }
-    exec(`mkdir ${curDate} && cd ${curDate} && npm init --y`, (error, stdout) => {
-        if (error) {
-            throw new Error(error.message);
-        }
-        const packagePath = getPackageName(stdout);
+    try {
+        const stdout = execSync(`mkdir ${curDate} && cd ${curDate} && npm init --y`);
+        const packagePath = getPackageName(stdout.toString());
         let jsonData = readFileSync(packagePath, {
             encoding: "utf8",
         });
@@ -38,9 +36,12 @@ function bootstrap() {
             });
             createFile(resolve(packagePath, "../index.ts"), config.overridePackage.author);
             logger.success("create file success:", packagePath);
-            return;
         }
-        logger.error("initial package error");
-    });
+    }
+    catch (error) {
+        if (error) {
+            throw new Error(error.message);
+        }
+    }
 }
 bootstrap();

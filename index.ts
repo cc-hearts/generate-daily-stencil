@@ -5,7 +5,7 @@
  */
 
 import { logger } from "@cc-heart/utils";
-import { exec } from "child_process";
+import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { createFile, exist, getPackageName } from "./lib/fs.js";
 import config from "./lib/config.js";
@@ -19,12 +19,11 @@ function bootstrap() {
   if (bool) {
     throw new Error("package.json is exist");
   }
-  exec(`mkdir ${curDate} && cd ${curDate} && npm init --y`, (error, stdout) => {
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    const packagePath = getPackageName(stdout);
+  try {
+    const stdout = execSync(
+      `mkdir ${curDate} && cd ${curDate} && npm init --y`
+    );
+    const packagePath = getPackageName(stdout.toString());
 
     let jsonData: string | Record<PropertyKey, unknown> = readFileSync(
       packagePath,
@@ -49,10 +48,12 @@ function bootstrap() {
       );
 
       logger.success("create file success:", packagePath);
-      return;
     }
-    logger.error("initial package error");
-  });
+  } catch (error) {
+    if (error) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 bootstrap();
