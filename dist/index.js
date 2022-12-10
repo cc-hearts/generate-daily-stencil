@@ -18,7 +18,11 @@ function bootstrap() {
         throw new Error("package.json is exist");
     }
     try {
-        const stdout = execSync(`mkdir ${curDate} && cd ${curDate} && npm init --y`);
+        const argv = process.argv;
+        const isOpenCode = argv.includes("--code");
+        execSync(`mkdir ${curDate} && cd ${curDate} && touch index.md && ${isOpenCode ? "code ." : ""}`);
+        let shell = `cd ${curDate} && npm init --y`;
+        const stdout = execSync(shell);
         const packagePath = getPackageName(stdout.toString());
         let jsonData = readFileSync(packagePath, {
             encoding: "utf8",

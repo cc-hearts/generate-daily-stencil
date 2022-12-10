@@ -20,9 +20,15 @@ function bootstrap() {
     throw new Error("package.json is exist");
   }
   try {
-    const stdout = execSync(
-      `mkdir ${curDate} && cd ${curDate} && npm init --y`
+    const argv = process.argv;
+    const isOpenCode = argv.includes("--code");
+    execSync(
+      `mkdir ${curDate} && cd ${curDate} && touch index.md && ${
+        isOpenCode ? "code ." : ""
+      }`
     );
+    let shell = `cd ${curDate} && npm init --y`;
+    const stdout = execSync(shell);
     const packagePath = getPackageName(stdout.toString());
 
     let jsonData: string | Record<PropertyKey, unknown> = readFileSync(
@@ -46,7 +52,6 @@ function bootstrap() {
         resolve(packagePath, "../index.ts"),
         config.overridePackage.author
       );
-
       logger.success("create file success:", packagePath);
     }
   } catch (error) {

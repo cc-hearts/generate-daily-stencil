@@ -1,11 +1,12 @@
 {
   "name": "generate-daily-stencil",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "ts-node-esm index.ts",
+    "deploy": "start --code",
     "start:cjs": "ts-node index.ts",
     "test": "jest --watchAll",
     "build": "tsc -p tsconfig.json"

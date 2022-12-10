@@ -1,7 +1,9 @@
 {
   "extends": "@cc-heart/utils",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "declarationDir": "./types",
+    "emitDeclarationOnly": false
   },
-  "include": ["lib/**/*","index.ts"]
+  "include": ["lib/**/*", "index.ts"]
 }
