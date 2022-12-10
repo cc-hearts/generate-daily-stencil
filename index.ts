@@ -76,7 +76,7 @@ res:
       );
       logger.success("create file success:", packagePath);
       if (isOpenCode) {
-        exec('chmod 777 ./code.sh && ./code.sh');
+        exec(`chmod 777 ./code.sh && cd ${curDate} && ../code.sh`);
       }
     }
   } catch (error) {
