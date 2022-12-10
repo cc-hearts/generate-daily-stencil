@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "ts-node-esm index.ts",
-    "deploy": "start --code",
+    "deploy": "ts-node-esm index.ts --code",
     "start:cjs": "ts-node index.ts",
     "test": "jest --watchAll",
     "build": "tsc -p tsconfig.json"

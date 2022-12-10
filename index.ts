@@ -5,12 +5,13 @@
  */
 
 import { logger } from "@cc-heart/utils";
-import { execSync } from "child_process";
+import { exec, execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 import { createFile, exist, getPackageName } from "./lib/fs.js";
 import config from "./lib/config.js";
 import { generateCurrentData } from "./lib/date.js";
 import { resolve } from "path";
+import { fileURLToPath } from "url";
 
 function bootstrap() {
   const { overridePackage } = config;
@@ -22,11 +23,32 @@ function bootstrap() {
   try {
     const argv = process.argv;
     const isOpenCode = argv.includes("--code");
-    execSync(
-      `mkdir ${curDate} && cd ${curDate} && touch index.md && ${
-        isOpenCode ? "code ." : ""
-      }`
+    const mdTemplate = `---
+title: ${curDate}
+date: ${curDate}
+---
+completed:
+
+- [x] ${curDate}
+
+undone:
+
+- [ ] ${curDate}
+
+res:
+
+`;
+
+    execSync(`mkdir ${curDate} && cd ${curDate} && touch index.md`);
+
+    writeFileSync(
+      resolve(fileURLToPath(import.meta.url), "../", `./${curDate}/index.md`),
+      mdTemplate,
+      {
+        encoding: "utf8",
+      }
     );
+
     let shell = `cd ${curDate} && npm init --y`;
     const stdout = execSync(shell);
     const packagePath = getPackageName(stdout.toString());
@@ -53,6 +75,9 @@ function bootstrap() {
         config.overridePackage.author
       );
       logger.success("create file success:", packagePath);
+      if (isOpenCode) {
+        exec('chmod 777 ./code.sh && ./code.sh');
+      }
     }
   } catch (error) {
     if (error) {
