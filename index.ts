@@ -76,7 +76,12 @@ res:
       );
       logger.success("create file success:", packagePath);
       if (isOpenCode) {
-        exec(`chmod 777 ./code.sh && cd ${curDate} && ../code.sh`);
+        const platform = process.platform;
+        if (platform === "darwin")
+          exec(`chmod 777 ./code.sh && cd ${curDate} && ../code.sh`);
+        else {
+          exec(`cd ${curDate} && code .`)
+        }
       }
     }
   } catch (error) {
